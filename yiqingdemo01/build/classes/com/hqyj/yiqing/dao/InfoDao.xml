@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hqyj.yiqing.dao.InfoDao">	<!-- 表头 -->
+
+<!-- 以下数据均为截止到2020-03-18的数据 -->
+<!-- 查询今日当前累计确诊总人数-81145 -->
+<!-- SELECT sum(confirmCount) from info where code <35 -->
+<select id="selectConfirmAllCount" resultType="java.lang.Integer">
+	SELECT sum(confirmCount) from info where code &lt; 35;
+</select>
+
+<!-- 查询当日的治愈人数 -->
+<select id="selectCuredAllCount" resultType="java.lang.Integer">
+	SELECT sum(curedCount) from info where code &lt; 35;
+</select>
+
+<!-- 查询当日的死亡人数 -->
+<select id="selectDeadAllCount" resultType="java.lang.Integer">
+	SELECT sum(deadCount) from info where code &lt; 35;
+</select>
+
+<!-- 用户选择的省份查询该省的现有确诊，现有治愈，现有死亡的统计 -->
+<select id="selectAllCountByPName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where provinceName = #{name} and areaName is null;
+</select>
+
+<!-- 查询34个省市地区的疫情数据 -->
+<select id="selectChinaInfo" resultType="com.hqyj.yiqing.pojo.Info">
+	SELECT * from info where code &lt; 35;
+</select>
+<!-- 根据省份名称查询该省的所有地区的疫情信息 -->
+<select id="selectInfoByName" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	SELECT * from info where provinceName=#{name} and areaName is not null;
+</select>
+
+<!-- 各省确诊人数前五的地区 -->
+<select id="getConfirmAboutFive" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	select * from info WHERE provinceName =#{name}  and areaName is not NULL order by confirmCount desc limit 5;
+</select>
+
+<!-- 各省治愈人数前五的地区 -->
+<select id="getCuredAboutFive" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	select * from info WHERE provinceName =#{name}  and areaName is not NULL order by curedCount desc limit 5;
+</select>
+
+<!-- 各省死亡人数前五的地区 -->
+<select id="getDeadAboutFive" resultType="com.hqyj.yiqing.pojo.Info" parameterType="java.lang.String">
+	select * from info WHERE provinceName =#{name}  and areaName is not NULL order by deadCount desc limit 5;
+</select>
+
+</mapper>
